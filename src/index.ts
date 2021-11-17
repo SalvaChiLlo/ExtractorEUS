@@ -103,19 +103,19 @@ function getBibliotecas(bibliotecas: BibliotecaEUS[]): BibliotecaModel[] {
     bibliotecasRes.push(provincia)
   })
 
-  const bibliotecasUnicas: BibliotecaModel[] = []
+  // const bibliotecasUnicas: BibliotecaModel[] = []
 
-  bibliotecasRes.forEach(biblioteca => {
-    const repeated = bibliotecasUnicas.filter(bibliotecaUnica => {
-      return bibliotecaUnica.nombre === biblioteca.nombre
-    })
+  // bibliotecasRes.forEach(biblioteca => {
+  //   const repeated = bibliotecasUnicas.filter(bibliotecaUnica => {
+  //     return bibliotecaUnica.nombre === biblioteca.nombre
+  //   })
 
-    if (!repeated.length) {
-      bibliotecasUnicas.push(biblioteca)
-    }
-  })
+  //   if (!repeated.length) {
+  //     bibliotecasUnicas.push(biblioteca)
+  //   }
+  // })
 
-  return bibliotecasUnicas;
+  return bibliotecasRes;
 }
 
 function populateDB(provincias: ProvinciumModel[], localidades: LocalidadModel[], bibliotecas: BibliotecaModel[]) {
