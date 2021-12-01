@@ -154,5 +154,11 @@ function populateDB(provincias: ProvinciumModel[], localidades: LocalidadModel[]
     }).catch(console.log)
   }).catch(console.log)
 }
-// extractData(JSON.parse(fs.readFileSync(path.join(__dirname, './bibliotecas.json')).toString()));
 
+function testExtractor() {
+  const rawData = fs.readFileSync(path.join(__dirname, '../EUS.json')).toString();
+  const parsedData = JSON.parse(rawData);
+  extractDataEUS(parsedData);
+}
+
+// testExtractor();
