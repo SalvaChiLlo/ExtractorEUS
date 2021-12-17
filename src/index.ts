@@ -15,6 +15,7 @@ export async function extractDataEUS(rawData: BibliotecaEUS[]) {
 
   console.log('Populating EUS_DATA');
   await populateDB(provincias, localidades, bibliotecas);
+  return { numLocalidades: localidades.length, numProvincias: provincias.length }
 }
 
 function getProvincias(bibliotecas: BibliotecaEUS[]): ProvinciumModel[] {
