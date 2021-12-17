@@ -6,7 +6,7 @@ const fs = require('fs');
 import path from "path";
 const { Biblioteca, Localidad, Provincia } = require('../../IEIBack/src/sqldb');
 
-export function extractDataEUS(rawData: BibliotecaEUS[]) {
+export async function extractDataEUS(rawData: BibliotecaEUS[]) {
   console.log('Extracting EUS_DATA')
 
   const provincias: ProvinciumModel[] = getProvincias(rawData);
@@ -14,7 +14,7 @@ export function extractDataEUS(rawData: BibliotecaEUS[]) {
   const bibliotecas: BibliotecaModel[] = getBibliotecas(rawData);
 
   console.log('Populating EUS_DATA');
-  populateDB(provincias, localidades, bibliotecas);
+  await populateDB(provincias, localidades, bibliotecas);
 }
 
 function getProvincias(bibliotecas: BibliotecaEUS[]): ProvinciumModel[] {
@@ -118,41 +118,38 @@ function getBibliotecas(bibliotecas: BibliotecaEUS[]): BibliotecaModel[] {
   return bibliotecasUnicas;
 }
 
-function populateDB(provincias: ProvinciumModel[], localidades: LocalidadModel[], bibliotecas: BibliotecaModel[]) {
-  Provincia.bulkCreate(
+async function populateDB(provincias: ProvinciumModel[], localidades: LocalidadModel[], bibliotecas: BibliotecaModel[]) {
+  const prov = await Provincia.bulkCreate(
     provincias,
     {
       ignoreDuplicates: true
     }
-  ).then(() => {
-    console.log('SUCCESS POPULATING PROVINCIAS');
-    Localidad.bulkCreate(
-      localidades,
-      {
-        ignoreDuplicates: true
-      }
-    ).then(() => {
-      console.log('SUCCESS POPULATING LOCALIDADES');
-      Biblioteca.bulkCreate(
-        bibliotecas,
-        {
-          updateOnDuplicate: [
-            'nombre',
-            'tipo',
-            'direccion',
-            'codigoPostal',
-            'longitud',
-            'latitud',
-            'telefono',
-            'email',
-            'descripcion',
-          ]
-        }
-      ).then(() => {
-        console.log('SUCCESS POPULATING BIBLIOTECAS');
-      }).catch(console.log)
-    }).catch(console.log)
-  }).catch(console.log)
+  )
+  console.log('SUCCESS POPULATING PROVINCIAS', prov.length);
+  const pob = await Localidad.bulkCreate(
+    localidades,
+    {
+      ignoreDuplicates: true
+    }
+  )
+  console.log('SUCCESS POPULATING LOCALIDADES', pob.length);
+  const bibl = await Biblioteca.bulkCreate(
+    bibliotecas,
+    {
+      updateOnDuplicate: [
+        'nombre',
+        'tipo',
+        'direccion',
+        'codigoPostal',
+        'longitud',
+        'latitud',
+        'telefono',
+        'email',
+        'descripcion',
+      ]
+    }
+  )
+  console.log('SUCCESS POPULATING BIBLIOTECAS', bibl.length);
 }
 
 function testExtractor() {
