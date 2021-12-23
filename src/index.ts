@@ -98,6 +98,7 @@ function getBibliotecas(bibliotecas: BibliotecaEUS[]): BibliotecaModel[] {
       telefono: biblioteca.phone.replace(/ /g, '').slice(0, 9),
       email: biblioteca.email,
       descripcion: biblioteca.documentDescription,
+      web: biblioteca.webpage,
       LocalidadNombreLocalidad: biblioteca.municipality.replace(/ /g, '').replace(/\//g, '-'),
     }
 
